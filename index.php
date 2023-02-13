@@ -9,10 +9,10 @@
   $M=new Message();
 $M->id=2;
   $M->adresse_exp="ensat@test.ma";
-  $M->sujet="TP";
-  $M->contenu="TP de java";
+  $M->sujet="TP 2";
+  $M->contenu="TP Contune";
   $M->date_envoi="10/01/2023";
   $M->etat=0;
-  //$M->save();
-Message::find(50);
+  $M->save();
+//Message::All();
 ?>

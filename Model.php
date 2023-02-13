@@ -26,11 +26,11 @@ abstract class Model
 
     public function save()
     {
-        var_dump($this);
         $data = (array) $this;
         $req = "";
+        $fields = $values = "";
         if ($this->id == 0) {
-            $fields = $values = "";
+            
             $req = "insert into " . get_class($this) . "(";
             foreach ($data as $key => $value)
                 if ($key != "id") {
@@ -40,9 +40,19 @@ abstract class Model
             $fields = substr($fields, 0, -1);
             $values = substr($values, 0, -1);
             $req .= $fields . ') values(' . $values . ')';
-        } else {
+            self::$pdo->exec($req);
+        } 
+        else {
+            $req="update ".get_class($this)." set ";
+            foreach ($data as $key => $value)
+                if ($key != "id") {
+                        $req.=" $key = '$value' ,";
+                }
+            $req = substr($req, 0, -1);
+            $values = substr($values, 0, -1);
+            self::$pdo->exec($req);
         }
-        self::$pdo->exec($req);
+
     }
 
 
@@ -51,33 +61,40 @@ abstract class Model
         try {
             if (isset($this->id) && $this->id > 0) {
                 $req = "delete from " . get_class($this) . " where id=" . $this->id;
-                echo $req;
+                self::$pdo->exec($req);
             }
         } catch (Exception $ex) {
             echo "Delete Not Completed Please recheck";
         }
-        self::$pdo->exec($req);
+        
     }
 
 
     public static function find($id)
-    {   
-      
-       
+    {
+        $req = "";
         try {
             if (isset($id) && $id > 0) {
                 $req = "select * from " . get_called_class() . " where id=" . $id;
-                echo $req;
+                self::$pdo->query($req)->fetch();
             }
         } catch (Exception $ex) {
-            echo "Delete Not Completed Please recheck";
+            echo "fetch $id Not Completed Please recheck";
         }
-        //self::$pdo->exec($req);
     }
 
 
     public static function All()
     {
+        $req = "";
+        try {
+
+            $req = "select * from " . get_called_class();
+            echo $req;
+           self::$pdo->query($req)->fetch();
+        } catch (Exception $ex) {
+            echo "fetch all Not Completed Please recheck";
+        }
     }
 }
 ?>
