@@ -41,6 +41,7 @@ abstract class Model
             $values = substr($values, 0, -1);
             $req .= $fields . ') values(' . $values . ')';
             self::$pdo->exec($req);
+            echo $req;
         } 
         else {
             $req="update ".get_class($this)." set ";
@@ -50,6 +51,8 @@ abstract class Model
                 }
             $req = substr($req, 0, -1);
             $values = substr($values, 0, -1);
+            echo $req;
+
             self::$pdo->exec($req);
         }
 
